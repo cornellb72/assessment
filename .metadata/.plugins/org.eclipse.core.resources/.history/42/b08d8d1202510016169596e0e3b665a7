@@ -1,0 +1,167 @@
+package automatedTest;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class ShoppingCart {
+
+	public static void main(String[] args) throws InterruptedException {
+		/**********************************
+		//testing on firefox 47.0.1
+		 **********************************/
+		WebDriver driver = new FirefoxDriver();
+		
+		Thread.sleep(2000);
+        
+		driver.get("http://www.build.com");
+
+		Thread.sleep(20000);
+
+		/**********************************
+		//first item
+		 **********************************/
+		WebElement searchField = driver.findElement(By.id("search_txt"));
+		searchField.sendKeys("suede kohler k-6626-6u");
+		searchField.submit();
+		
+		Thread.sleep(6000);
+		
+		WebElement addToCart = driver.findElement(By.id("prdAddToCart"));
+		addToCart.submit();
+		
+		Thread.sleep(6000);
+		
+		/**********************************
+		//second item
+		 **********************************/
+		WebElement searchHeader = driver.findElement(By.id("headerSearchInput"));
+		searchHeader.sendKeys("cashmere kohler k-6626-6u");
+		searchHeader.submit();
+		
+		Thread.sleep(6000);
+		
+		WebElement addToCart2 = driver.findElement(By.id("prdAddToCart"));
+		addToCart2.submit();
+		
+		Thread.sleep(6000);
+		
+		
+		/****************************************************************************
+		* third and fourth items
+		* KOHLER K6066 ST Stainless steel sink rack appears to be out of stock.
+		* choosing  k 6000,  looks similar
+		 **************************************************************************/
+		WebElement searchHeader2 = driver.findElement(By.id("headerSearchInput"));
+		searchHeader2.sendKeys("kohler k-6000");
+		searchHeader2.submit();
+		
+		Thread.sleep(6000);
+		
+		WebElement quantity = driver.findElement(By.id("qtyselected"));
+		quantity.clear();
+		quantity.sendKeys("2");
+		
+		Thread.sleep(2000);
+		
+		WebElement addToCart3 = driver.findElement(By.id("prdAddToCart"));		
+		addToCart3.submit();
+
+		Thread.sleep(6000);
+		
+		/**********************************
+		 * changing zip to get a tax value
+		 *********************************/
+		WebElement zipButton = driver.findElement(By.id("changeZip_btn"));
+		zipButton.click();
+		Thread.sleep(1000);
+		WebElement zipInput = driver.findElement(By.id("shipZipInput"));
+		zipInput.sendKeys("95928");
+		zipInput.submit();
+		Thread.sleep(2000);
+		
+		/**********************************
+		 * assert correct price
+		 *********************************/
+		
+		//WebElement subtotal = driver.findElement(By.id("subtotalamount"));
+		//assertThat(subtotal.getText()).isEqualTo("$1,403.64");
+		//WebElement tax = driver.findElement(By.id("taxAmount"));
+		//WebElement total = driver.findElement(By.id("grandtotalamount"));
+		
+		/**********************************
+		//checkout
+		 **********************************/
+		//WebElement cartButton = driver.findElement(By.id("checkoutbuttons"));
+		//cartButton.click();
+		driver.navigate().to("https://www.build.com/index.cfm?page=checkout:payments");
+		Thread.sleep(6000);
+		
+		WebElement guestButton = driver.findElement(By.id("guest-login"));
+		guestButton.click();
+		
+		Thread.sleep(6000);
+		
+		/**********************************
+		//shipping
+		 **********************************/
+		WebElement firstName = driver.findElement(By.id("shippingfirstname"));
+		firstName.sendKeys("Brian");
+		Thread.sleep(1000);
+		
+		WebElement lastName = driver.findElement(By.id("shippinglastname"));
+		lastName.sendKeys("Cornell");
+		Thread.sleep(1000);
+		
+		WebElement address = driver.findElement(By.id("shippingaddress1"));
+		address.sendKeys("381 Redwood Lane");
+		Thread.sleep(1000);
+		
+		WebElement zip = driver.findElement(By.id("shippingpostalcode"));
+		zip.clear();
+		zip.sendKeys("95928");	
+		zip.submit();
+		Thread.sleep(1000);
+		
+		WebElement phone = driver.findElement(By.id("shippingphonenumber"));
+		phone.clear();
+		phone.sendKeys("(530)514-1122");
+		Thread.sleep(1000);
+		
+		WebElement email = driver.findElement(By.id("emailAddress"));
+		email.sendKeys("qwerty@gmail.com");
+		Thread.sleep(1000);
+			
+		/**********************************
+		//billing
+		 **********************************/
+		WebElement creditNumber = driver.findElement(By.id("creditCardNumber"));
+		creditNumber.sendKeys("4111111111111111");
+		Thread.sleep(1000);
+		
+		WebElement creditMonth = driver.findElement(By.id("creditCardMonth"));
+		creditMonth.sendKeys("12");
+		Thread.sleep(1000);
+		
+		WebElement creditYear = driver.findElement(By.id("creditCardYear"));
+		creditYear.sendKeys("2020");
+		Thread.sleep(1000);
+		
+		WebElement creditCVV2 = driver.findElement(By.id("creditCardCVV2"));
+		creditCVV2.sendKeys("724");		
+		Thread.sleep(1000);
+		
+		WebElement creditName = driver.findElement(By.id("creditcardname"));
+		creditName.clear();
+		creditName.sendKeys("Brian Cornell");	
+		Thread.sleep(1000);
+		
+		WebElement reviewOrder = driver.findElement(By.id("creditcard"));
+		reviewOrder.click();
+		Thread.sleep(6000);
+		//driver.quit();
+
+	}
+
+}

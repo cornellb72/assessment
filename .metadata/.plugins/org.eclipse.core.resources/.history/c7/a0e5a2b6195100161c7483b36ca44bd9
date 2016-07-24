@@ -1,0 +1,180 @@
+package automatedTest;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ShoppingCart {
+	/***********************************************************
+	 * adjust wait times here
+	 **********************************************************/
+	static int waitTimeLong = 6000;
+	static int waitTimeShort = 2000;
+	
+	public static void main(String[] args) throws InterruptedException {
+		/***********************************************************
+		//firefox 47.0.1
+		 **********************************************************/
+		
+		WebDriver driver = new FirefoxDriver();
+		
+		Thread.sleep(waitTimeShort);
+
+		driver.get("http://www.build.com");
+		
+		// temporary for captcha, should make conditional
+		Thread.sleep(20000);
+
+		/***********************************************************
+		//search, add first item to cart
+		 **********************************************************/
+		WebElement searchField = driver.findElement(By.id("search_txt"));
+		searchField.sendKeys("suede kohler k-6626-6u");
+		searchField.submit();
+		
+		Thread.sleep(waitTimeLong);
+		
+		WebElement addToCart = driver.findElement(By.id("prdAddToCart"));
+		addToCart.submit();
+		
+		Thread.sleep(waitTimeLong);
+		
+		/***********************************************************
+		//search, add second item to cart
+		 **********************************************************/
+		WebElement searchHeader = driver.findElement(By.id("headerSearchInput"));
+		searchHeader.sendKeys("cashmere kohler k-6626-6u");
+		searchHeader.submit();
+		
+		Thread.sleep(waitTimeLong);
+		
+		WebElement addToCart2 = driver.findElement(By.id("prdAddToCart"));
+		addToCart2.submit();
+		
+		Thread.sleep(waitTimeLong);
+		
+		
+		/***********************************************************
+		* search, add third and fourth items to cart
+		* KOHLER K6066 ST Stainless steel sink rack appears to be out of stock.
+		* choosing  k 6000,  looks similar
+		 **********************************************************/
+		WebElement searchHeader2 = driver.findElement(By.id("headerSearchInput"));
+		searchHeader2.sendKeys("kohler k-6000");
+		searchHeader2.submit();
+		
+		Thread.sleep(waitTimeLong);
+		
+		WebElement quantity = driver.findElement(By.id("qtyselected"));
+		quantity.clear();
+		quantity.sendKeys("2");
+		
+		Thread.sleep(waitTimeShort);
+		
+		WebElement addToCart3 = driver.findElement(By.id("prdAddToCart"));		
+		addToCart3.submit();
+
+		Thread.sleep(waitTimeLong);
+		
+		/***********************************************************
+		 * changing zip to get a tax value
+		 **********************************************************/
+		WebElement zipButton = driver.findElement(By.id("changeZip_btn"));
+		zipButton.click();
+		Thread.sleep(waitTimeShort);
+		WebElement zipInput = driver.findElement(By.id("shipZipInput"));
+		zipInput.sendKeys("95928");
+		zipInput.submit();
+		Thread.sleep(waitTimeShort);
+		
+		/***********************************************************
+		//checkout
+		 **********************************************************/
+		driver.navigate().to("https://www.build.com/index.cfm?page=checkout:payments");
+		Thread.sleep(waitTimeLong);
+		
+		WebElement guestButton = driver.findElement(By.id("guest-login"));
+		guestButton.click();
+		
+		Thread.sleep(waitTimeLong);
+		
+		/***********************************************************
+		//enter shipping info
+		 **********************************************************/
+		WebElement firstName = driver.findElement(By.id("shippingfirstname"));
+		firstName.sendKeys("Brian");
+		Thread.sleep(waitTimeShort);
+		
+		WebElement lastName = driver.findElement(By.id("shippinglastname"));
+		lastName.sendKeys("Cornell");
+		Thread.sleep(waitTimeShort);
+		
+		WebElement address = driver.findElement(By.id("shippingaddress1"));
+		address.sendKeys("381 Redwood Lane");
+		Thread.sleep(waitTimeShort);
+		
+		WebElement zip = driver.findElement(By.id("shippingpostalcode"));
+		zip.clear();
+		zip.sendKeys("95928");	
+		zip.submit();
+		Thread.sleep(waitTimeShort);
+		
+		WebElement phone = driver.findElement(By.id("shippingphonenumber"));
+		phone.clear();
+		phone.sendKeys("(530)514-1122");
+		Thread.sleep(waitTimeShort);
+		
+		WebElement email = driver.findElement(By.id("emailAddress"));
+		email.sendKeys("qwerty@gmail.com");
+		Thread.sleep(waitTimeShort);
+			
+		/***********************************************************
+		//enter billing info
+		 **********************************************************/
+		WebElement creditNumber = driver.findElement(By.id("creditCardNumber"));
+		creditNumber.sendKeys("4111111111111111");
+		Thread.sleep(waitTimeShort);
+		
+		WebElement creditMonth = driver.findElement(By.id("creditCardMonth"));
+		creditMonth.sendKeys("12");
+		Thread.sleep(waitTimeShort);
+		
+		WebElement creditYear = driver.findElement(By.id("creditCardYear"));
+		creditYear.sendKeys("2020");
+		Thread.sleep(waitTimeShort);
+		
+		WebElement creditCVV2 = driver.findElement(By.id("creditCardCVV2"));
+		creditCVV2.sendKeys("724");		
+		Thread.sleep(waitTimeShort);
+		
+		WebElement creditName = driver.findElement(By.id("creditcardname"));
+		creditName.clear();
+		creditName.sendKeys("Brian Cornell");	
+		Thread.sleep(waitTimeShort);
+		
+		/***********************************************************
+		//review page
+		 **********************************************************/
+		WebElement reviewOrder = driver.findElement(By.id("creditcard"));
+		reviewOrder.submit();
+		Thread.sleep(waitTimeLong);
+	
+
+	
+		WebElement subtotal = driver.findElement(By.id("subtotalamount"));
+		WebElement tax = driver.findElement(By.id("taxAmount"));
+		WebElement total = driver.findElement(By.id("grandtotalamount"));
+		
+		asserThatPriceIsRight(subtotal.toString(), tax.toString(), total.toString());
+			
+		driver.quit();
+	}
+	  public static void asserThatPriceIsRight(String strSubTotal, String strTax, String strTotal) {
+		  assertThat(strSubTotal).contains("1403.64");
+		  assertThat(strTax).contains("105.27");
+		  assertThat(strTotal).contains("1,508.91");
+	  }
+
+}
