@@ -175,9 +175,20 @@ public class ShoppingCart {
 	}
 
 	  public static void asserThatPriceIsRight(WebElement eSubTotal, WebElement eTax, WebElement eTotal) {
-		  assertThat(eSubTotal.getAttribute("data-subtotal")).isEqualTo("1403.64");
-		  assertThat(eTax.getAttribute("data-tax")).isEqualTo("105.27");
-		  assertThat(eTotal.getText()).contains("$1,508.91");
+			double lSubTotal = Double.valueOf(eSubTotal.getAttribute("data-subtotal"));
+			double lTax = lSubTotal * 7.5;
+			double lTotal = lSubTotal + lTax;
+			
+		  assertThat(Double.valueOf(eSubTotal.getAttribute("data-subtotal"))== lSubTotal);
+		  assertThat(Double.valueOf(eTax.getAttribute("data-tax"))==lTax);
+
+		  String s1Total = eTotal.getText();
+		  String s2Total = s1Total.substring(1);		  
+		  String s3Total = s2Total.replace(",", "");
+		  
+		  double dTotal=Double.valueOf(s3Total);
+ 
+		  assertThat(dTotal == lTotal);
 	  }
 
 }
