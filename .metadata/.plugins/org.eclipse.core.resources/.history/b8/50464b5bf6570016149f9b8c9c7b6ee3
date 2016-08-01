@@ -93,7 +93,7 @@ public class ShoppingCart {
 		/***********************************************************
 		//checkout
 		 **********************************************************/
-		driver.findElement(By.linkText("Checkout")).click();
+		driver.navigate().to("https://www.build.com/index.cfm?page=checkout:payments");
 		Thread.sleep(waitTimeLong);
 		
 		WebElement guestButton = driver.findElement(By.id("guest-login"));
